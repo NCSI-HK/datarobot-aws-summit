@@ -22,8 +22,7 @@ DEPLOYMENT_ID = st.secrets["DEPLOYMENT_ID"]
 openai.api_type = "azure"
 openai.api_version = "2024-02-15-preview"
 openai.api_base = "https://datarobot-oai.openai.azure.com/"
-openai.api_key = st.secrets['openai']['openai_key']
-
+openai.api_key = st.secrets["openai"]["openai_key"]
 
 ## CONFIG
 st.set_page_config(
@@ -31,6 +30,10 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="auto",
 )
+
+@st.cache(allow_output_mutation=True)
+def get_df():
+    return [None]
 
 
 ## TITLE
@@ -49,9 +52,8 @@ with title_icon:
 ## APPLICATION FORM
 st.subheader("Loan Application Form")
 
-with st.form("loan_form", clear_on_submit=True):
+with st.form("loan_form"):
     client = st.text_input("Applicant Name")
-    # client = st.text_input("Applicant Name", value="Serafim")
     loan_amt = st.selectbox("Loan Amount", [5_000, 15_000, 20_000])
     term = st.selectbox("Repayment Period", [36, 60])
     emp_length = st.selectbox("Years of Employment", ["0 - 5 years", "6 - 10 years", "11+ years"])
@@ -102,7 +104,7 @@ if sub_application:
         scoring_data,
         max_explanations=5,
     )
-
+    
     map_feat_name = {
         "loan_amnt": "Loan Amount",
         "term": "Repayment Period",
@@ -115,6 +117,7 @@ if sub_application:
     df_sub["ex2_fn"] = df_sub["EXPLANATION_2_FEATURE_NAME"].astype(str) + ": " + df_sub["EXPLANATION_2_ACTUAL_VALUE"].astype(str)
     df_sub["ex3_fn"] = df_sub["EXPLANATION_3_FEATURE_NAME"].astype(str) + ": " + df_sub["EXPLANATION_3_ACTUAL_VALUE"].astype(str)
     df_sub["ex4_fn"] = df_sub["EXPLANATION_4_FEATURE_NAME"].astype(str) + ": " + df_sub["EXPLANATION_4_ACTUAL_VALUE"].astype(str)
+    get_df()[0] = df_sub
     
     st.subheader("Credit Score Explanation")
     st.write("Risk of default is ", df["is_bad_1_PREDICTION"][0], ", and the explanations are")
@@ -151,9 +154,8 @@ with st.form("email_form"):
 if sub_email:
     if approve == "Approve":
         _ = ""
-    elif approve == 'Reject':
-        st.write(client)
-        st.write(df)
+    elif approve == "Reject":
+        df_sub = get_df()[0]
         
         exp_str = f"""\
         - {df_sub.loc[0, "EXPLANATION_1_FEATURE_NAME"]}: {df_sub.loc[0, "EXPLANATION_1_ACTUAL_VALUE"]}
@@ -186,10 +188,10 @@ if sub_email:
         <state the reason of not approving the loan application>
         <the reason should be listed in point form.>
         Your Sincerely,
-        NCS(I) HK Limited
+        Fictional NCS(I) Finance HK Limited
         ```
         """.strip().replace("    ", "")
-        st.write(usr_pmt)
+        
         response = openai.ChatCompletion.create(
             messages = [
                 {"role": "system", "content": sys_pmt},
