@@ -21,7 +21,7 @@ DEPLOYMENT_ID = st.secrets["DEPLOYMENT_ID"]
 # OpenAI
 openai.api_type = "azure"
 openai.api_version = "2024-02-15-preview"
-openai.api_base = "https://datarobot-oai.openai.azure.com/"
+openai.api_base = "https://next-openai-lab.openai.azure.com/"
 openai.api_key = st.secrets["openai"]["openai_key"]
 
 ## CONFIG
@@ -197,7 +197,7 @@ if sub_email:
                 {"role": "system", "content": sys_pmt},
                 {"role": "user", "content": usr_pmt}
             ],
-            engine="gpt-35-16k",
+            engine="gpt-4o-mini",
             temperature=.1,
             top_p=.5,
         )["choices"][0]["message"]["content"]
