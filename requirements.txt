@@ -10,3 +10,4 @@ boto3
 xgboost
 shap
 streamlit_shap
+altair<5
