@@ -31,7 +31,7 @@ st.set_page_config(
     initial_sidebar_state="auto",
 )
 
-@st.cache_data(allow_output_mutation=True)
+@st.cache_data#(allow_output_mutation=True)
 def get_df():
     return [None]
 
