@@ -1,9 +1,9 @@
-datarobot==3.0.2
+datarobot
 numpy==1.23.3
 pandas==1.5.3
-Pillow==9.4.0
+Pillow
 plotly==5.13.1
-streamlit==1.19.0
+streamlit
 openai==0.28
 shap
 boto3
