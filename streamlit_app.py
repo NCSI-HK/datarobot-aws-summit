@@ -155,7 +155,7 @@ if sub_email:
     if approve == "Approve":
         _ = ""
     elif approve == "Reject":
-        df_sub = get_df()[0]
+        df_sub = df.copy()
         
         exp_str = f"""\
         - {df_sub.loc[0, "EXPLANATION_1_FEATURE_NAME"]}: {df_sub.loc[0, "EXPLANATION_1_ACTUAL_VALUE"]}
