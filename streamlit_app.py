@@ -31,7 +31,7 @@ st.set_page_config(
     initial_sidebar_state="auto",
 )
 
-@st.cache_data#(allow_output_mutation=True)
+@st.cache_data(allow_output_mutation=True)
 def get_df():
     return [None]
 
@@ -155,7 +155,7 @@ if sub_email:
     if approve == "Approve":
         _ = ""
     elif approve == "Reject":
-        df_sub = df.copy()
+        df_sub = get_df()[0]
         
         exp_str = f"""\
         - {df_sub.loc[0, "EXPLANATION_1_FEATURE_NAME"]}: {df_sub.loc[0, "EXPLANATION_1_ACTUAL_VALUE"]}
