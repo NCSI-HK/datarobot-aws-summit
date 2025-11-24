@@ -11,7 +11,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-from openai import AzureOpenAI
+import openai
 from typing import Dict, Tuple, Optional
 import time
 
